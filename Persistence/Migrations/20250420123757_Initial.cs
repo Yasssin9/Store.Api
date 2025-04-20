@@ -5,7 +5,7 @@
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,7 +37,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MyProperty",
+                name: "Product",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -51,15 +51,15 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MyProperty", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MyProperty_ProductBrand_BrandId",
+                        name: "FK_Product_ProductBrand_BrandId",
                         column: x => x.BrandId,
                         principalTable: "ProductBrand",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MyProperty_ProductType_TypeId",
+                        name: "FK_Product_ProductType_TypeId",
                         column: x => x.TypeId,
                         principalTable: "ProductType",
                         principalColumn: "Id",
@@ -67,13 +67,13 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MyProperty_BrandId",
-                table: "MyProperty",
+                name: "IX_Product_BrandId",
+                table: "Product",
                 column: "BrandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MyProperty_TypeId",
-                table: "MyProperty",
+                name: "IX_Product_TypeId",
+                table: "Product",
                 column: "TypeId");
         }
 
@@ -81,7 +81,7 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MyProperty");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "ProductBrand");

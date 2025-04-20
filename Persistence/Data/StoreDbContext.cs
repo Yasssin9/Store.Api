@@ -17,11 +17,16 @@ namespace Persistence.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(StoreDbContext).Assembly);
-        }
 
-        public DbSet<Product> Product { get; set; }
+            //modelBuilder.Entity<Product>()
+            //.Property(p => p.Price)
+            //.HasColumnType("decimal(18,2)");
+
+        }
+    
         public DbSet<ProductBrand> ProductBrand { get; set; }
         public DbSet<ProductType> ProductType { get; set; }
+        public DbSet<Product> Product { get; set; }
 
 
 

@@ -1,5 +1,6 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
 using System.Text.Json;
 
@@ -17,9 +18,12 @@ namespace Persistence
         {
             try
             {
+                //if(_storeDbContext.Database.GetPendingMigrations().Any())
+                //    _storeDbContext.Database.Migrate();
+
                 if (!_storeDbContext.ProductType.Any())
                 {
-                    var typesData = File.ReadAllText(@"..\Persistence\Data\Seeding\types.json");
+                        var typesData = File.ReadAllText(@"..\Persistence\Data\Seeding\types.json");
                     var types = JsonSerializer.Deserialize<List<ProductType>>(typesData);
                     if (types is not null && types.Any())
                     {
@@ -40,14 +44,16 @@ namespace Persistence
 
                     if (!_storeDbContext.Product.Any())
                     {
-                        var productData = File.ReadAllText(@"..\Persistence\Data\Seeding\product.json");
+                        var productData = File.ReadAllText(@"..\Persistence\Data\Seeding\products.json");
                         var products = JsonSerializer.Deserialize<List<Product>>(productData);
                         if (products is not null && products.Any())
                         {
                             await _storeDbContext.Product.AddRangeAsync(products);
                             await _storeDbContext.SaveChangesAsync();
+                            
                         }
                     }
+                    
                 }
 
             }

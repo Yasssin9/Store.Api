@@ -11,8 +11,8 @@ using Persistence.Data;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20250409154157_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250420123757_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("MyProperty");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductBrand", b =>

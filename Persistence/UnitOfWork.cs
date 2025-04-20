@@ -18,6 +18,7 @@ namespace Persistence
         public UnitOfWork(StoreDbContext storeDbContext)
         {
             _storeDbContext = storeDbContext;
+            _repositories = new();
         }
         public IGenrericRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
             => (IGenrericRepository<TEntity, TKey>)_repositories.GetOrAdd(typeof(TEntity).Name, x => new GenericRepository<TEntity, TKey>(_storeDbContext));

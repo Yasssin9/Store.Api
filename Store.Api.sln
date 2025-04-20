@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{AA311624-21AD-424F-AE45-02F747A4F9D8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,5 +67,8 @@ Global
 		{3E99E791-2EA6-4AEB-B992-A334AD38FA89} = {0F1F9B56-52C3-4FAA-A54E-39110CEABABB}
 		{CFE70527-C717-4386-A36F-07CCF0E25F8F} = {DED0C25A-D5D4-4BD7-95BB-034EC7170AD1}
 		{991F1BBB-AA87-4641-8A39-09F6FC8607E1} = {DED0C25A-D5D4-4BD7-95BB-034EC7170AD1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1484C7B-DE14-4F11-8CE3-52DFCF37FA29}
 	EndGlobalSection
 EndGlobal
