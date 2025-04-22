@@ -20,6 +20,7 @@ namespace Services.MappingProfile
             else
             {
                 return $"{source.PictureUrl}";
+                //welcome in session 2
             }
         }
     }
