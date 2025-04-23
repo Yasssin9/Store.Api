@@ -26,9 +26,8 @@ namespace Store.Api
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IServiceManager,ServiceManager>();
+            builder.Services.AddAutoMapper(typeof(Services.ServiceManager).Assembly);
 
-            builder.Services.AddAutoMapper(x=>x.AddProfile(new ProductProfile()));
-            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -46,6 +45,8 @@ namespace Store.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

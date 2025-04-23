@@ -5,23 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using Shared.ProductDtos;
 
 namespace Services.MappingProfile
 {
-    public class PictureUrlResolver : IValueResolver<Product, ProductResultDto, string>
+    public class PictureUrlResolver(IConfiguration config) : IValueResolver<Product, ProductResultDto, string>
     {
         public string Resolve(Product source, ProductResultDto destination, string destMember, ResolutionContext context)
         {
-            if (string.IsNullOrEmpty(source.PictureUrl))
-            {
+            if (string.IsNullOrWhiteSpace(source.PictureUrl))
                 return string.Empty;
-            }
-            else
-            {
-                return $"{source.PictureUrl}";
-                //welcome in session 2
-            }
+
+            return $"{config["BaseUrl"]}{source.PictureUrl}";
+            
         }
     }
 }

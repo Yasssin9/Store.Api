@@ -26,9 +26,18 @@ namespace Persistence.Repositories
             return await _storeDbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<TEntity?>> GetAllAsync(Specification<TEntity> specification)
+        {
+            return await SpecificationEvaluator.GetQuery(_storeDbContext.Set<TEntity>(), specification).ToListAsync();
+        }
+
         public async Task<TEntity?> GetAsync(Tkey id)
         => await _storeDbContext.Set<TEntity>().FindAsync(id);
-        
+
+        public async Task<TEntity?> GetAsync(Specification<TEntity> specification)
+        {
+            return await SpecificationEvaluator.GetQuery(_storeDbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
+        }
 
         public void Update(TEntity entity)
         => _storeDbContext.Set<TEntity>().Update(entity);

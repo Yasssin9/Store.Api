@@ -10,7 +10,9 @@ namespace Domain.Contracts
     public interface IGenrericRepository<TEntity,Tkey> where TEntity : BaseEntity<Tkey>
     {
         Task<TEntity?> GetAsync(Tkey id);
+        Task<TEntity?> GetAsync(Specification<TEntity> specification);
         Task<IEnumerable<TEntity?>> GetAllAsync(bool isTrackable=false);
+        Task<IEnumerable<TEntity?>> GetAllAsync(Specification<TEntity> specification);
 
         Task AddAsync(TEntity entity);
 
