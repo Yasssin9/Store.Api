@@ -26,17 +26,17 @@ namespace Persistence.Repositories
             return await _storeDbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
-        public Task<IEnumerable<TEntity?>> GetAllAsync(Specification<TEntity> specification)
+        public async Task<IEnumerable<TEntity?>> GetAllAsync(Specification<TEntity> specification)
         {
-            throw new NotImplementedException();
+            return await SpecificationEvaluator.GetQuery(_storeDbContext.Set<TEntity>(), specification).ToListAsync();
         }
 
         public async Task<TEntity?> GetAsync(Tkey id)
         => await _storeDbContext.Set<TEntity>().FindAsync(id);
 
-        public Task<TEntity?> GetAsync(Specification<TEntity> specification)
+        public async Task<TEntity?> GetAsync(Specification<TEntity> specification)
         {
-            throw new NotImplementedException();
+            return await SpecificationEvaluator.GetQuery(_storeDbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
         }
 
         public void Update(TEntity entity)
