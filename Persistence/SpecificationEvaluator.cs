@@ -18,7 +18,16 @@ namespace Persistence
             //Example on Criteria means ==> (x=>x.BrandId==3 && x=>x.TypeId==1)
             query = specification.Include.Aggregate(query, (currentQuery, include) => currentQuery.Include(include));
 
-            return query;
+            if (specification.OrderBy is not null)
+                query = query.OrderBy(specification.OrderBy);
+
+            else if (specification.OrderByDescending is not null)
+                query = query.OrderByDescending(specification.OrderByDescending);
+
+            if(specification.IsPaginated)
+                query=query.Skip(specification.Skip).Take(specification.Take);
+           
+                return query;
         }    
         
 

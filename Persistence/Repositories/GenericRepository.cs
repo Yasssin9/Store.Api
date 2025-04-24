@@ -16,6 +16,13 @@ namespace Persistence.Repositories
         public async Task AddAsync(TEntity entity)
         => await _storeDbContext.AddAsync(entity);
 
+        public async Task<int> CountAsync(Specification<TEntity> specification)        
+           => await ApplySpecification(specification).CountAsync();
+
+
+        private IQueryable<TEntity> ApplySpecification(Specification<TEntity> specification)
+            => SpecificationEvaluator.GetQuery(_storeDbContext.Set<TEntity>(), specification);
+
         public void Delete(TEntity entity)
         =>  _storeDbContext.Set<TEntity>().Remove(entity);
 

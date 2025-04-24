@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 using Shared.ProductDtos;
 
 namespace Services.Abstractions
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductResultDto>> GetAllProductAsync(ProductSpecificationParams specs);
+        Task<PaginatedResult<ProductResultDto>> GetAllProductAsync(ProductSpecificationParams specs);
 
         Task<ProductResultDto> GetProductByIdAsync(int id);
 

@@ -8,6 +8,7 @@ using Domain.Contracts;
 using Domain.Entities;
 using Services.Abstractions;
 using Services.Specification;
+using Shared;
 using Shared.ProductDtos;
 
 namespace Services
@@ -31,15 +32,20 @@ namespace Services
             return mappedBrands;
         }
 
-        public async Task<IEnumerable<ProductResultDto>> GetAllProductAsync(ProductSpecificationParams specifications)
+        public async Task<PaginatedResult<ProductResultDto>> GetAllProductAsync(ProductSpecificationParams specifications)
         {
             var specs=new ProductWithFilterSpecification(specifications);
 
             var product = await unitOfWork.GetRepository<Product, int>().GetAllAsync(specs);
 
+            var countSpecs = new ProductCountSpecification(specifications);
+
+            var totalCount = await unitOfWork.GetRepository<Product, int>().CountAsync(countSpecs);
+
             var mappedProduct=mapper.Map<IEnumerable<ProductResultDto>>(product);
 
-            return mappedProduct;
+            return new PaginatedResult<ProductResultDto>(specifications.PageIndex,
+                specifications.PageSize, totalCount, mappedProduct);
         }
 
         public async Task<IEnumerable<TypeResultDto>> GetAllTypeAsync()
@@ -62,9 +68,6 @@ namespace Services
             return mappedProduct;
         }
 
-        Task<IEnumerable<ProductResultDto>> IProductService.GetAllProductAsync()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
