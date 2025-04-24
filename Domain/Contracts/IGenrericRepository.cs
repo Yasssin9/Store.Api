@@ -14,6 +14,8 @@ namespace Domain.Contracts
         Task<IEnumerable<TEntity?>> GetAllAsync(bool isTrackable=false);
         Task<IEnumerable<TEntity?>> GetAllAsync(Specification<TEntity> specification);
 
+        Task<int> CountAsync(Specification<TEntity> specification);
+
         Task AddAsync(TEntity entity);
 
         void Update(TEntity entity);

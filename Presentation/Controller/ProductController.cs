@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Shared;
 using Shared.ProductDtos;
 
 namespace Presentation.Controller
@@ -13,9 +14,9 @@ namespace Presentation.Controller
     public class ProductController(IServiceManager serviceManager): ApiController
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductResultDto>>> GetAllProducts()
+        public async Task<ActionResult<PaginatedResult<ProductResultDto>>> GetAllProducts([FromQuery]ProductSpecificationParams specs)
         {
-            var products = await serviceManager.ProductService.GetAllProductAsync();
+            var products = await serviceManager.ProductService.GetAllProductAsync(specs);
 
             return Ok(products);
         }
