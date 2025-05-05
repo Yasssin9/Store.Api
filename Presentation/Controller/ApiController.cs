@@ -9,7 +9,7 @@ using Shared.ErrorModels;
 
 namespace Presentation.Controller
 {
-    c
+    
     [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ValidationErrorResponse), (int)HttpStatusCode.BadRequest)]
