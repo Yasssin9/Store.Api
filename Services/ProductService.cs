@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Domain.Exceptions;
 using Services.Abstractions;
 using Services.Specification;
 using Shared;
@@ -65,7 +66,7 @@ namespace Services
 
             var mappedProduct = mapper.Map<ProductResultDto>(product);
 
-            return mappedProduct;
+            return product is null ? throw new ProductNotFoundException(id) : mappedProduct;
         }
 
        
