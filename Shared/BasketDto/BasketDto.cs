@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Shared.BasketDto
 {
-    public class CustomerBasket
+    public record BasketDto
     {
         public string Id { get; set; }
-        public IEnumerable<BasketItem> BasketItem { get; set; }
+        public IEnumerable<BasketItemDto> Items { get; set; }
+
     }
 }

@@ -9,8 +9,7 @@ using Shared.ErrorModels;
 
 namespace Presentation.Controller
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
+    c
     [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ValidationErrorResponse), (int)HttpStatusCode.BadRequest)]

@@ -66,7 +66,7 @@ namespace Services
 
             var mappedProduct = mapper.Map<ProductResultDto>(product);
 
-            return product is null ? throw new ProductNotFoundException(id) : mappedProduct;ؤ
+            return product is null ? throw new ProductNotFoundException(id) : mappedProduct;
         }
 
        

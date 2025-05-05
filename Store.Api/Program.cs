@@ -1,10 +1,10 @@
-
 using System.Reflection.Metadata;
 using Domain.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.Data;
+using Persistence.Repositories;
 using Services;
 using Services.Abstractions;
 using Services.MappingProfile;
@@ -33,6 +33,7 @@ namespace Store.Api
 
             builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
             builder.Services.AddScoped<IServiceManager,ServiceManager>();
             builder.Services.AddAutoMapper(typeof(Services.ServiceManager).Assembly);
 
