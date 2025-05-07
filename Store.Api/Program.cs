@@ -1,9 +1,13 @@
 using System.Reflection.Metadata;
 using Domain.Contracts;
+using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Persistence;
 using Persistence.Data;
+using Persistence.Identity;
 using Persistence.Repositories;
 using Services;
 using Services.Abstractions;
@@ -28,6 +32,11 @@ namespace Store.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
+
             builder.Services.AddSingleton<IConnectionMultiplexer>
                 (_ => ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
 
@@ -42,6 +51,16 @@ namespace Store.Api
                 option.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
             });
 
+            builder.Services.AddIdentity<User, IdentityRole>(Options =>
+            {
+                Options.Password.RequireNonAlphanumeric = false;
+                Options.Password.RequireLowercase = false;
+                Options.Password.RequireUppercase = false;
+                Options.Password.RequireDigit = true;
+                Options.Password.RequiredLength = 8;
+                Options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<StoreIdentityDbContext>();
             
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -64,6 +83,8 @@ namespace Store.Api
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
 
@@ -79,6 +100,7 @@ namespace Store.Api
             var dbIntializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
 
             await dbIntializer.InitializeAsync();
+            await dbIntializer.InitializeIdentityAsync();
         }
     }
 }

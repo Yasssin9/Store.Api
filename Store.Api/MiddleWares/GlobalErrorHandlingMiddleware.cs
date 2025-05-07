@@ -62,6 +62,7 @@ namespace Store.Api.MiddleWares
             httpContext.Response.StatusCode = ex switch
             {
                 NotFoundExceptions => (int)HttpStatusCode.NotFound,
+                UnAuthorizedException => (int)HttpStatusCode.Unauthorized,
                 ValidationException validationException => HandleValidationException(validationException, response),
                 _ => (int)HttpStatusCode.InternalServerError,
             };

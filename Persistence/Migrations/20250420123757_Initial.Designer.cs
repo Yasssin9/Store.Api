@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.Data;
+using Persistence.Identity;
 
 #nullable disable
 
 namespace Persistence.Migrations
 {
-    [DbContext(typeof(StoreDbContext))]
+    [DbContext(typeof(StoreIdentityDbContext))]
     [Migration("20250420123757_Initial")]
     partial class Initial
     {
