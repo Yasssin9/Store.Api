@@ -9,13 +9,14 @@ using AutoMapper;
 using Domain.Entities.Identity;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstractions;
 using Shared.IdentityDtos;
 
 namespace Services
 {
-    public class AuthenticationService(UserManager<User> userManager,IMapper mapper) : IAuthenticationService
+    public class AuthenticationService(UserManager<User> userManager,IMapper mapper,IOptions<JWTOptions> options) : IAuthenticationService
     {
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
@@ -64,6 +65,7 @@ namespace Services
 
         private async Task<String> CreateTokenAsync(User user)
         {
+            var jwtOptions = options.Value;
             //Claims
             var claims = new List<Claim>
             {
@@ -86,7 +88,9 @@ namespace Services
             var token = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: creds,
-                expires: DateTime.UtcNow.AddDays(1)
+                expires: DateTime.UtcNow.AddDays(jwtOptions.DurationInDays),
+                audience: jwtOptions.Audience,
+                issuer: jwtOptions.Issuer
                 );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

@@ -12,7 +12,9 @@ using Persistence.Repositories;
 using Services;
 using Services.Abstractions;
 using Services.MappingProfile;
+using Shared.IdentityDtos;
 using StackExchange.Redis;
+using Store.Api.Extentions;
 using Store.Api.Factories;
 using Store.Api.MiddleWares;
 
@@ -25,50 +27,16 @@ namespace Store.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddControllers();
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-
-            builder.Services.AddDbContext<StoreIdentityDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
-            });
-
-            builder.Services.AddSingleton<IConnectionMultiplexer>
-                (_ => ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
-
-            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
-            builder.Services.AddScoped<IServiceManager,ServiceManager>();
-            builder.Services.AddAutoMapper(typeof(Services.ServiceManager).Assembly);
-
-            builder.Services.Configure<ApiBehaviorOptions>(option =>
-            {
-                option.InvalidModelStateResponseFactory = ApiResponseFactory.CustomValidationErrorResponse;
-            });
-
-            builder.Services.AddIdentity<User, IdentityRole>(Options =>
-            {
-                Options.Password.RequireNonAlphanumeric = false;
-                Options.Password.RequireLowercase = false;
-                Options.Password.RequireUppercase = false;
-                Options.Password.RequireDigit = true;
-                Options.Password.RequiredLength = 8;
-                Options.User.RequireUniqueEmail = true;
-            })
-                .AddEntityFrameworkStores<StoreIdentityDbContext>();
-            
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddCoreServices(builder.Configuration);
+            builder.Services.AddPresentationServices();
+                       
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            
 
             var app = builder.Build();
 
-            await SeedDbAsync(app);
+            await  app.SeedDbAsync();
 
             app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
@@ -93,14 +61,6 @@ namespace Store.Api
             app.Run();
         }
             
-        static async Task SeedDbAsync(WebApplication app) 
-        {
-            using var scope = app.Services.CreateScope();
-
-            var dbIntializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-
-            await dbIntializer.InitializeAsync();
-            await dbIntializer.InitializeIdentityAsync();
-        }
+        
     }
 }
