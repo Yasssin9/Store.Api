@@ -9,6 +9,7 @@ using AutoMapper;
 using Domain.Entities.Identity;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstractions;
@@ -18,6 +19,39 @@ namespace Services
 {
     public class AuthenticationService(UserManager<User> userManager,IMapper mapper,IOptions<JWTOptions> options) : IAuthenticationService
     {
+        public async Task<AddressDto> GetUserAddressAsync(string email)
+        {
+            var user= await userManager.Users.Include(x=>x.Address)
+                .FirstOrDefaultAsync(x=>x.Email==email);
+
+            if(user is null)
+                throw new UserNotFoundException(email);
+
+            return mapper.Map<AddressDto>(user.Address);
+        }
+
+        public async Task<UserResultDto> GetUserByEmailAsync(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user is null)
+                throw new UserNotFoundException(email);
+
+            return new UserResultDto(
+                user.DisplayName,
+                user.Email,
+                null
+             );
+           
+        }
+
+        public async Task<bool> IsEmailExist(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            return user != null;
+        }
+
         public async Task<UserResultDto> LoginAsync(LoginDto loginDto)
         {
             var user = await userManager.FindByEmailAsync(loginDto.MyEmail);
@@ -63,6 +97,21 @@ namespace Services
             );
         }
 
+        public async Task<AddressDto> UpdateUserAddressAsync(string email, AddressDto addressDto)
+        {
+            var user = await userManager.Users.Include(x => x.Address)
+                .FirstOrDefaultAsync(x => x.Email == email);
+
+            if (user is null)
+                throw new UserNotFoundException(email);
+
+            var mappedAddress= mapper.Map<Address>(addressDto);
+            user.Address = mappedAddress;
+
+            await userManager.UpdateAsync(user);
+            return addressDto;
+        }
+
         private async Task<String> CreateTokenAsync(User user)
         {
             var jwtOptions = options.Value;
@@ -80,7 +129,7 @@ namespace Services
                 claims.Add(new Claim(ClaimTypes.Role,role));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Top-Security-Key"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecurityKey));
 
             var creds=new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
 
