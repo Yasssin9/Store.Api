@@ -7,7 +7,8 @@ using Shared.ProductDtos;
 
 namespace Presentation.Controller
 {
-    
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class ProductController(IServiceManager serviceManager): ApiController
     {
         [HttpGet]

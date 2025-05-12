@@ -3,6 +3,7 @@ using Domain.Contracts;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Persistence;
@@ -30,8 +31,8 @@ namespace Store.Api
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddCoreServices(builder.Configuration);
             builder.Services.AddPresentationServices();
+            
                        
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             
 
             var app = builder.Build();
@@ -54,7 +55,6 @@ namespace Store.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

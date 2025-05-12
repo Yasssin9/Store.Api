@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Entities.OrderEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,10 @@ namespace Persistence.Data
         public DbSet<ProductBrand> ProductBrand { get; set; }
         public DbSet<ProductType> ProductType { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+        
 
 
 
