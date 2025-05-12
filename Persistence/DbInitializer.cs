@@ -1,6 +1,7 @@
 ﻿using Domain.Contracts;
 using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Entities.OrderEntities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
@@ -63,8 +64,20 @@ namespace Persistence
                         }
                     }
                     
-                }
 
+                }
+                    if (!_storeDbContext.DeliveryMethods.Any())
+                    {
+                        var deliveryData = File.ReadAllText(@"C:\Users\ahmed\Source\Repos\Store.Api\Persistence\Data\Seeding\delivery.json");
+                        var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+                        if (deliveryMethods is not null && deliveryMethods.Any())
+                        {
+                            await _storeDbContext.DeliveryMethods.AddRangeAsync(deliveryMethods);
+                            await _storeDbContext.SaveChangesAsync();
+
+                        }
+                    }
+               
             }
             catch (Exception ex) 
             { 
